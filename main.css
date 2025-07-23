@@ -1,6 +1,8 @@
 body {
   font-family: Futura, Helvetica, Arial, sans-serif;
   color: #444;
+  background-image: url(./me.png);
+  background-size: cover;
 }
 
 h1 {
@@ -11,6 +13,24 @@ h1 {
   display: flex;
   align-items: center;
   flex-direction: column;
+  /* height: 300vh; */
+}
+
+h1{
+  box-shadow: #444;
+  color: rgb(88, 122, 65);
+  border: 2px solid rgb(15, 155, 160);
+  justify-content: center;
+  padding: 2px;
+  margin-top: 2px;
+}
+
+.board{
+  width: 500px;
+  height: 500px;
+  border-radius: 3px;
+  border: 5px solid green ;
+  padding: 20px;
 }
 
 #board{
@@ -18,13 +38,13 @@ h1 {
 }
 
 #board td{
-  border: 1px solid #ddd;
+  border: 1px solid #635c5c;
   width: 18px;
   height: 18px;
 }
 
 td.alive {
-  background-color: #8CC8DD;
+  background-color: #82a71e;
 }
 
 #control_panel {
@@ -47,4 +67,8 @@ td.alive {
 
 .button:focus {
   outline: dashed 1px #2ba6cb;
+}
+
+p, a{
+  color: white;
 }

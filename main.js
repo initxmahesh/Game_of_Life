@@ -41,18 +41,16 @@ document.getElementById("board").append(table);
  */
 
 const paint = () => {
-  // TODO:
-  //   1. For each <td> in the table:
-  //     a. If its corresponding cell in gol instance is alive,
-  //        give the <td> the `alive` CSS class.
-  //     b. Otherwise, remove the `alive` class.
-  //
-  // To find all the <td>s in the table, you might query the DOM for them, or you
-  // could choose to collect them when we create them in createTable.
-  //
-  // HINT:
-  //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
-  //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+  tds.forEach(td => {
+    const row = parseInt(td.dataset.row, 10);
+    const col = parseInt(td.dataset.col, 10);
+    const cellState = gol.getCell(row, col);
+    if (cellState === 1) {
+      td.classList.add('alive');
+    } else {
+      td.classList.remove('alive')
+    }
+  })
 }
 
 
@@ -61,24 +59,51 @@ const paint = () => {
  */
 
 document.getElementById("board").addEventListener("click", event => {
-  // TODO: Toggle clicked cell (event.target) and paint
+  const td = event.target;
+  if (td.tagName === "TD") {
+    const row = parseInt(td.dataset.row, 10)
+    const col = parseInt(td.dataset.col, 10)
+    gol.toggleCell(row, col);
+    paint();
+  }
 });
 
 document.getElementById("step_btn").addEventListener("click", event => {
-  // TODO: Do one gol tick and paint
+  gol.tick();
+  paint();
 });
 
-document.getElementById("play_btn").addEventListener("click", event => {
-  // TODO: Start playing by calling `tick` and paint
-  // repeatedly every fixed time interval.
-  // HINT:
-  // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
+let intervalId = null;
+
+document.getElementById("play_btn").addEventListener("click", (event) => {
+  if (intervalId) {
+    clearInterval(intervalId);
+    intervalId = null;
+    event.target.textContent = "Play"; // Update button text
+  } else {
+    intervalId = setInterval(() => {
+      gol.tick(); 
+      paint(); 
+    }, 200); 
+    event.target.textContent = "Pause"; // Update button text
+  }
 });
 
 document.getElementById("random_btn").addEventListener("click", event => {
-  // TODO: Randomize the board and paint
+  for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
+      const randomState = Math.random() < 0.5 ? 0 : 1; // 50% chance for alive or dead
+      gol.setCell(randomState, row, col);
+    }
+  }
+  paint(); // Update the DOM
 });
 
 document.getElementById("clear_btn").addEventListener("click", event => {
-  // TODO: Clear the board and paint
+  for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
+      gol.setCell(0, row, col); // Set all cells to dead
+    }
+  }
+  paint(); // Update the DOM
 });
